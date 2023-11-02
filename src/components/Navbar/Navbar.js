@@ -17,7 +17,7 @@ function NavbarStyle() {
                 <ul style={{listStyleType:'none'}}>
 
                 <Link spy={true} to='' smooth={true} activeClass='activeClass'>
-                            <li>Home</li>
+                            <li>Load Testing</li>
                         </Link>
                         <Link spy={true} to='' smooth={true} >
                             <li>Soak Testing</li>

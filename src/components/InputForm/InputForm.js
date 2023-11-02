@@ -14,7 +14,10 @@ const InputForm = () => {
     responseTime: '',
     duration: '',
     httpMethod: '',
+    requestBody:'',
   });
+
+  const [showInputBox, setShowInputBox] = useState(false);
 
   const [selectedOption, setSelectedOption] = useState(''); // State to store the selected option
   const [inputValue, setInputValue] = useState('');
@@ -25,12 +28,21 @@ const InputForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const handleHttpMethodChange = (e) => {
+    const selectedMethod = e.target.value;
+    setFormData({ ...formData, httpMethod: selectedMethod });
+
+    // Set showInputBox to true when "POST" or "PUT" is selected
+    setShowInputBox(selectedMethod === 'POST' || selectedMethod === 'PUT');
+  };
+
   const handleOptionChange = (e) => {
     setSelectedOption(e.target.value);
     setInputValue(''); // Clear the input when the option changes
   };
 
   const handleSubmit = async () => {
+    console.log('entering api');
     try {
       // Send the data to the Spring Boot application
       await fetch('http://your-spring-boot-api-endpoint', {
@@ -48,6 +60,7 @@ const InputForm = () => {
         responseTime: '',
         duration: '',
         httpMethod: '',
+        requestBody:'',
       });
 
     } catch (error) {
@@ -97,24 +110,27 @@ const InputForm = () => {
           />
         </div>
         <div>
-
           <label>HTTP Method:</label>
-              <div>
-                <select>
-                  <option value={formData.httpMethod} onChange={handleInputChange} >GET</option>
-                  <option value={formData.httpMethod} onChange={handleInputChange} >POST</option>
-                  <option value={formData.httpMethod} onChange={handleInputChange} >PUT</option>
-                  <option value={formData.httpMethod} onChange={handleInputChange} >DELETE</option>
-                </select>
-            {/* <input className='inputfild'
-            type="text"
-            name="httpMethod"
-            value={formData.httpMethod} onChange={handleInputChange}
-            
-          /> */}
-            
+          <div>
+            <select name="httpMethod" onChange={handleHttpMethodChange}>
+              <option value="GET">GET</option>
+              <option value="POST">POST</option>
+              <option value="PUT">PUT</option>
+              <option value="DELETE">DELETE</option>
+            </select>
           </div>
         </div>
+        {showInputBox && (
+          <div>
+            <label>Request Body:</label>
+            <input
+              type="text"
+              name="requestBody"
+              value={formData.requestBody}
+              onChange={handleInputChange}
+            />
+          </div>
+        )}
       </form>
       <div className='input-button'>
         <button className="button n-button" onClick={handleSubmit}>Submit</button>
